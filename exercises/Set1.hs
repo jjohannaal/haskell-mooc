@@ -95,8 +95,8 @@ checkPassword password = if password == "swordfish" || password == "mellon"
 postagePrice :: Int -> Int
 postagePrice weight
     | weight <= 500 = 250
-    | weight <= 5000 = 300 + weight - 500
-    | otherwise = 6000
+    | weight > 500 = 300 + weight 
+    | weight < 5000 = 6000
 
 ------------------------------------------------------------------------------
 -- Ex 8: define a function isZero that returns True if it is given an
@@ -148,5 +148,5 @@ power n k
 
 ilog3 :: Int -> Int
 ilog3 n
-    | n < 3 = 0
-    | otherwise = 1 + ilog3 (n `div` 3)
+  | n <= 1    = 0  -- Base case for n <= 1
+  | otherwise = 1 + ilog3 (n `div` 3)
