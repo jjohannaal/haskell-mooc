@@ -95,7 +95,7 @@ checkPassword password = if password == "swordfish" || password == "mellon"
 postagePrice :: Int -> Int
 postagePrice weight
     | weight <= 500 = 250
-    | weight <= 5000 = 300 + (weight - 500)
+    | weight <= 5000 = 300 + (1 * weight)
     | weight > 5000 = 6000
 
 ------------------------------------------------------------------------------
