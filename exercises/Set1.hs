@@ -93,7 +93,10 @@ checkPassword password = if password == "swordfish" || password == "mellon"
 -- in grams, and returns the cost in credits.
 
 postagePrice :: Int -> Int
-postagePrice = todo
+postagePrice weight
+    | weight <= 500 = 250
+    | weight <= 5000 = 300 + weight - 500
+    | otherwise = 6000
 
 ------------------------------------------------------------------------------
 -- Ex 8: define a function isZero that returns True if it is given an
@@ -103,7 +106,9 @@ postagePrice = todo
 --
 -- Ps. remember, the type of booleans in haskell is Bool
 
-isZero = todo
+isZero :: Integer -> Bool
+isZero 0 = True
+isZero _ = False
 
 ------------------------------------------------------------------------------
 -- Ex 9: implement using recursion a function sumTo such that
@@ -111,14 +116,19 @@ isZero = todo
 -- computes the sum 1+2+...+n
 
 sumTo :: Integer -> Integer
-sumTo = todo
+sumTo n
+    | n <= 0 = 0
+    | otherwise = n + sumTo (n - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 10: power n k should compute n to the power k (i.e. n^k)
 -- Use recursion.
 
 power :: Integer -> Integer -> Integer
-power = todo
+power _ 0 = 1
+power n k
+    | k > 0 = n * power n (k - 1)
+    | otherwise = error
 
 ------------------------------------------------------------------------------
 -- Ex 11: ilog3 n should be the number of times you can divide given
@@ -136,5 +146,7 @@ power = todo
 --   ilog3 2 ==> 1
 --   ilog3 7 ==> 2
 
-ilog3 :: Integer -> Integer
-ilog3 = todo
+ilog3 :: Int -> Int
+ilog3 n
+    | n < 3 = 0
+    | otherwise = 1 + ilog3 (n `div` 3)
