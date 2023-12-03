@@ -40,7 +40,7 @@ double x = x * 2
 -- four.
 
 quadruple :: Integer -> Integer
-quadruple x = todo
+quadruple x = double (double x)
 
 ------------------------------------------------------------------------------
 -- Ex 4: define the function distance. It should take four arguments of
@@ -56,7 +56,11 @@ quadruple x = todo
 --   distance 0 0 1 1  ==>  1.4142135...
 --   distance 1 1 4 5  ==>  5.0
 
-distance = todo
+distance :: Double -> Double -> Double -> Double -> Double
+distance x1 y1 x2 y2 = sqrt ((xDistance ^ 2) + (yDistance ^ 2))
+  where
+    xDistance = x2 - x1
+    yDistance = y2 - y1
 
 ------------------------------------------------------------------------------
 -- Ex 5: define the function eeny that returns "eeny" for even inputs
@@ -65,7 +69,9 @@ distance = todo
 -- Ps. have a look at the built in function "even"
 
 eeny :: Integer -> String
-eeny = todo
+eeny n
+  | even n = "eeny"
+  | otherwise = "meeny"
 
 ------------------------------------------------------------------------------
 -- Ex 6: here's the function checkPassword from the course material.
@@ -73,7 +79,7 @@ eeny = todo
 -- "mellon".
 
 checkPassword :: String -> String
-checkPassword password = if password == "swordfish"
+checkPassword password = if password == "swordfish" || password == "mellon"
                          then "You're in."
                          else "ACCESS DENIED!"
 
