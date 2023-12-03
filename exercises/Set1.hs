@@ -146,7 +146,4 @@ power n k
 --   ilog3 2 ==> 1
 --   ilog3 7 ==> 2
 
-ilog3 :: Int -> Int
-ilog3 n
-    | n < 3 = 0
-    | otherwise = 1 + ilog3 (n `div` 3)
+
