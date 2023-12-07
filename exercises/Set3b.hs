@@ -126,11 +126,7 @@ sorted (x:y:xs)
 -- Use pattern matching and recursion (and the list constructors : and [])
 
 sumsOf :: [Int] -> [Int]
-sumsOf xs = sumsHelper 0 xs  
-
-sumsHelper :: Int -> [Int] -> [Int]
-sumsHelper _ [] = []  
-sumsHelper acc (x:xs) = (acc + x) : sumsHelper (acc + x) xs  
+sumsOf xs = todo
 
 
 ------------------------------------------------------------------------------
