@@ -46,8 +46,9 @@ data Name = Name String
   deriving Show
 
 instance Eq Name where
-  (==) (Name "") (Name "") = True
-  (==) (Name n1) (Name n2) = length n1 == length n2 && toLower (head n1) == toLower (head n2) && Name (tail n1) 
+ Name a == Name b
+     | [toLower x | x <- a] == [toLower x | x <- b] = True
+     | otherwise = False
 
 ------------------------------------------------------------------------------
 -- Ex 4: here is a list type parameterized over the type it contains.
