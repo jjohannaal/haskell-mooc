@@ -221,5 +221,4 @@ winner scores player1 player2 =
 --
 -- Hint: check out Data.Array.indices or Data.Array.assocs
 
-maxIndex :: (Ix i, Ord a) => Array i a -> i
-maxIndex arr = fst $ maximumBy (\(_,x) (_,y) -> compare x y) $ assocs arr
+
