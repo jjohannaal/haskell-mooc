@@ -13,6 +13,7 @@ import Mooc.Todo
 --
 -- The constructors don't need any fields.
 
+data Vehicle = Bike | Bus | Tram | Train deriving (Show)
 
 ------------------------------------------------------------------------------
 -- Ex 2: Define the type BusTicket that can represent values like these:
@@ -20,6 +21,7 @@ import Mooc.Todo
 --  - MonthlyTicket "January"
 --  - MonthlyTicket "December"
 
+data BusTicket = SingleTicket | MonthlyTicket String deriving (Show)
 
 ------------------------------------------------------------------------------
 -- Ex 3: Here's the definition for a datatype ShoppingEntry that
@@ -130,8 +132,16 @@ data Student = Freshman | NthYear Int | Graduated
 -- on. A 7th year student gets changed to a graduated student. A
 -- graduated student stays graduated even if he studies.
 
+data Student = Freshman | NthYear Int | Graduated
+  deriving (Show, Eq)
+
 study :: Student -> Student
-study = todo
+study Freshman = NthYear 1                  -- Freshman becomes a 1st year student
+study (NthYear n)
+  | n < 7 = NthYear (n + 1)                -- Increment the year if less than 7th year
+  | otherwise = Graduated                  -- 7th year student becomes graduated
+study Graduated = Graduated                 -- Graduated student stays graduated
+
 
 ------------------------------------------------------------------------------
 -- Ex 7: define a datatype UpDown that represents a counter that can
