@@ -178,7 +178,7 @@ winner scores player1 player2 =
 
 
 freqs :: (Eq a, Ord a) => [a] -> Map.Map a Int
-freqs xs = todo
+freqs = foldr (\x -> Map.alter (Just . maybe 1 (+ 1)) x) Map.empty
 
 ------------------------------------------------------------------------------
 -- Ex 10: recall the withdraw example from the course material. Write a
