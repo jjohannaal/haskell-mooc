@@ -112,8 +112,6 @@ palindrome str = str == reverse str
 -- Example:
 --   capitalize "goodbye cruel world" ==> "Goodbye Cruel World"
 
-import Data.Char (toUpper)
-
 capitalizeFirst :: String -> String
 capitalizeFirst [] = []
 capitalizeFirst (x:xs) = toUpper x : xs
