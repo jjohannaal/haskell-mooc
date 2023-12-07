@@ -49,17 +49,17 @@ data Set a = Set [a]
 
 -- emptySet is a set with no elements
 emptySet :: Set a
-emptySet = []
+emptySet = Set []
 
 -- member tests if an element is in a set
 member :: Eq a => a -> Set a -> Bool
-member val (Set []) = False
-member val (Set (x:xs)) = x == val || member val (Set xs)
+member val (Set xs) = elem val xs
 
 -- add a member to a set
-add :: Ord a => a -> Set a -> Set a
-add val (Set []) = Set [val]
-add val g@(Set b) = if member val g then g else  Set (sort (val:b))
+add :: (Ord a) => a -> Set a -> Set a
+add val (Set xs) = if elem val xs
+                   then (Set xs)
+                   else Set ((takeWhile (<val) xs) ++ [val] ++ (dropWhile (<=val) xs))
 
 ------------------------------------------------------------------------------
 -- Ex 3: a state machine for baking a cake. The type Event represents
