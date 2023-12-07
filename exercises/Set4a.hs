@@ -35,7 +35,7 @@ import Data.Array
 -- you remove the Eq a => constraint from the type!
 
 allEqual :: Eq a => [a] -> Bool
-allEqual [] = True  
+allEqual [] = True  -- An empty list is considered to have all equal elements
 allEqual (x:xs) = all (== x) xs
 
 ------------------------------------------------------------------------------
@@ -51,8 +51,7 @@ allEqual (x:xs) = all (== x) xs
 --   distinct [1,2] ==> True
 
 distinct :: Eq a => [a] -> Bool
-distinct xs = length xs == length (nub xs)
-
+distinct = todo
 
 ------------------------------------------------------------------------------
 -- Ex 3: implement the function middle that returns the middle value
@@ -65,11 +64,7 @@ distinct xs = length xs == length (nub xs)
 --   middle 'b' 'a' 'c'  ==> 'b'
 --   middle 1 7 3        ==> 3
 
-middle :: Ord a => a -> a -> a -> a
-middle x y z
-  | x >= y && x <= z || x <= y && x >= z = x
-  | y >= x && y <= z || y <= x && y >= z = y
-  | otherwise = z
+middle = todo
 
 ------------------------------------------------------------------------------
 -- Ex 4: return the range of an input list, that is, the difference
@@ -84,8 +79,8 @@ middle x y z
 --   rangeOf [4,2,1,3]          ==> 3
 --   rangeOf [1.5,1.0,1.1,1.2]  ==> 0.5
 
-rangeOf :: Ord a => [a] -> a
-rangeOf xs = maximum xs - minimum xs
+rangeOf :: [a] -> a
+rangeOf = todo
 
 ------------------------------------------------------------------------------
 -- Ex 5: given a (non-empty) list of (non-empty) lists, return the longest
@@ -103,9 +98,7 @@ rangeOf xs = maximum xs - minimum xs
 --   longest [[1,2,3],[4,5],[6]] ==> [1,2,3]
 --   longest ["bcd","def","ab"] ==> "bcd"
 
-longest :: (Ord a) => [[a]] -> [a]
-longest [] = error "Empty list"
-longest (x:xs) = foldr (\list acc -> if length list > length acc || (length list == length acc && head list <= head acc) then list else acc) x xs
+longest = todo
 
 ------------------------------------------------------------------------------
 -- Ex 6: Implement the function incrementKey, that takes a list of
@@ -121,11 +114,8 @@ longest (x:xs) = foldr (\list acc -> if length list > length acc || (length list
 --   incrementKey True [(True,1),(False,3),(True,4)] ==> [(True,2),(False,3),(True,5)]
 --   incrementKey 'a' [('a',3.4)] ==> [('a',4.4)]
 
-incrementKey :: (Eq k, Num v) => k -> [(k, v)] -> [(k, v)]
-incrementKey _ [] = []
-incrementKey key ((k, v):rest)
-  | key == k = (k, v + 1) : incrementKey key rest
-  | otherwise = (k, v) : incrementKey key rest
+incrementKey :: k -> [(k,v)] -> [(k,v)]
+incrementKey = todo
 
 ------------------------------------------------------------------------------
 -- Ex 7: compute the average of a list of values of the Fractional
@@ -140,7 +130,7 @@ incrementKey key ((k, v):rest)
 -- length to a Fractional
 
 average :: Fractional a => [a] -> a
-average xs = sum xs / fromIntegral (length xs)
+average xs = todo
 
 ------------------------------------------------------------------------------
 -- Ex 8: given a map from player name to score and two players, return
@@ -158,11 +148,8 @@ average xs = sum xs / fromIntegral (length xs)
 --   winner (Map.fromList [("Mike",13607),("Bob",5899),("Lisa",5899)]) "Lisa" "Bob"
 --     ==> "Lisa"
 
-
 winner :: Map.Map String Int -> String -> String -> String
-winner scores player1 player2 =
-  let score1 = Map.findWithDefault 0 player1 scores
-      score2 = Map.findWithDefault 0 player2 scores
+winner scores player1 player2 = todo
 
 ------------------------------------------------------------------------------
 -- Ex 9: compute how many times each value in the list occurs. Return
@@ -176,7 +163,8 @@ winner scores player1 player2 =
 --   freqs [False,False,False,True]
 --     ==> Map.fromList [(False,3),(True,1)]
 
-
+freqs :: (Eq a, Ord a) => [a] -> Map.Map a Int
+freqs xs = todo
 
 ------------------------------------------------------------------------------
 -- Ex 10: recall the withdraw example from the course material. Write a
@@ -203,6 +191,8 @@ winner scores player1 player2 =
 --   transfer "Lisa" "Mike" 20 bank
 --     ==> fromList [("Bob",100),("Mike",50)]
 
+transfer :: String -> String -> Int -> Map.Map String Int -> Map.Map String Int
+transfer from to amount bank = todo
 
 ------------------------------------------------------------------------------
 -- Ex 11: given an Array and two indices, swap the elements in the indices.
@@ -211,7 +201,8 @@ winner scores player1 player2 =
 --   swap 2 3 (array (1,4) [(1,"one"),(2,"two"),(3,"three"),(4,"four")])
 --         ==> array (1,4) [(1,"one"),(2,"three"),(3,"two"),(4,"four")]
 
-
+swap :: Ix i => i -> i -> Array i a -> Array i a
+swap i j arr = todo
 
 ------------------------------------------------------------------------------
 -- Ex 12: given an Array, find the index of the largest element. You
@@ -221,4 +212,6 @@ winner scores player1 player2 =
 --
 -- Hint: check out Data.Array.indices or Data.Array.assocs
 
+maxIndex :: (Ix i, Ord a) => Array i a -> i
+maxIndex = todo
 
