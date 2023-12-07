@@ -211,12 +211,7 @@ winner scores player1 player2 =
 --   swap 2 3 (array (1,4) [(1,"one"),(2,"two"),(3,"three"),(4,"four")])
 --         ==> array (1,4) [(1,"one"),(2,"three"),(3,"two"),(4,"four")]
 
-swap :: Ix i => i -> i -> Array i a -> Array i a
-swap i j arr =
-  let val_i = arr ! i
-      val_j = arr ! j
-      swapped = arr // [(i, val_j), (j, val_i)]
-  in swapped
+
 
 ------------------------------------------------------------------------------
 -- Ex 12: given an Array, find the index of the largest element. You
