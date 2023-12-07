@@ -82,7 +82,7 @@ middle x y z = case [x, y, z] of
 --   rangeOf [4,2,1,3]          ==> 3
 --   rangeOf [1.5,1.0,1.1,1.2]  ==> 0.5
 
-rangeOf :: Ord a => [a] -> a
+rangeOf :: (Num a, Ord a) => [a] -> a
 rangeOf xs = maximum xs - minimum xs
 
 ------------------------------------------------------------------------------
