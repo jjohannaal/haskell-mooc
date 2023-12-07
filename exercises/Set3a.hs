@@ -199,13 +199,6 @@ joinToLength len strings = [x ++ y | x <- strings, y <- strings, length (x ++ y)
 --   [] +|+ [True]        ==> [True]
 --   [] +|+ []            ==> []
 
-infixr 5 +|+
-
-(+|+) :: [a] -> [b] -> [a]
-(+|+) [] _ = []
-(+|+) (x:_) [] = [x]
-(+|+) (x:_) (y:_) = [x, y]
-
 ------------------------------------------------------------------------------
 -- Ex 11: remember the lectureParticipants example from Lecture 2? We
 -- used a value of type [Either String Int] to store some measurements
