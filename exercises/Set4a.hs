@@ -204,20 +204,7 @@ winner scores player1 player2 =
 --     ==> fromList [("Bob",100),("Mike",50)]
 
 transfer :: String -> String -> Int -> Map.Map String Int -> Map.Map String Int
-transfer from to amount bank
-  | not (validTransaction from to amount bank) = bank
-  | otherwise = updateBalances from to amount bank
-
-validTransaction :: String -> String -> Int -> Map.Map String Int -> Bool
-validTransaction from to amount bank =
-  Map.member from bank && Map.member to bank && amount >= 0 && maybe False (>= amount) (Map.lookup from bank)
-
-updateBalances :: String -> String -> Int -> Map.Map String Int -> Map.Map String Int
-updateBalances from to amount bank =
-  let updatedFrom = Map.adjust (\x -> x - amount) from bank
-      updatedTo = Map.adjust (+ amount) to updatedFrom
-  in updatedTo
-
+transfer from to amount bank = todo
 
 ------------------------------------------------------------------------------
 -- Ex 11: given an Array and two indices, swap the elements in the indices.
