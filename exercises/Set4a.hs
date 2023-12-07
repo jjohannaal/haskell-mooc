@@ -51,7 +51,8 @@ allEqual (x:xs) = all (== x) xs
 --   distinct [1,2] ==> True
 
 distinct :: Eq a => [a] -> Bool
-distinct xs = length xs == Set.size (Set.fromList xs)
+distinct [] = True
+distinct (x:xs) = not (elem x xs) && distinct xs
 
 ------------------------------------------------------------------------------
 -- Ex 3: implement the function middle that returns the middle value
