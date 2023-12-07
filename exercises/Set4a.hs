@@ -177,8 +177,6 @@ winner scores player1 player2 =
 --     ==> Map.fromList [(False,3),(True,1)]
 
 
-freqs :: (Eq a, Ord a) => [a] -> Map.Map a Int
-freqs = foldr (\x -> Map.alter (Just . maybe 1 (+ 1)) x) Map.empty
 
 ------------------------------------------------------------------------------
 -- Ex 10: recall the withdraw example from the course material. Write a
