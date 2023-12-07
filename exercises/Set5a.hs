@@ -124,8 +124,6 @@ right = todo
 -- Ex 6: Here's a datatype that represents a student. A student can
 -- either be a freshman, a nth year student, or graduated.
 
-data Student = Freshman | NthYear Int | Graduated
-  deriving (Show,Eq)
 
 -- Implement the function study, which changes a Freshman into a 1st
 -- year student, a 1st year student into a 2nd year student, and so
