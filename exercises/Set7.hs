@@ -26,11 +26,11 @@ data Velocity = Velocity Double
 
 -- velocity computes a velocity given a distance and a time
 velocity :: Distance -> Time -> Velocity
-velocity = todo
+velocity (Distance x) (Time y) = Velocity (x / y)
 
 -- travel computes a distance given a velocity and a time
 travel :: Velocity -> Time -> Distance
-travel = todo
+travel (Velocity y) (Time x) = Distance (x *  y)
 
 ------------------------------------------------------------------------------
 -- Ex 2: let's implement a simple Set datatype. A Set is a list of
@@ -49,15 +49,17 @@ data Set a = Set [a]
 
 -- emptySet is a set with no elements
 emptySet :: Set a
-emptySet = todo
+emptySet = []
 
 -- member tests if an element is in a set
 member :: Eq a => a -> Set a -> Bool
-member = todo
+member val (Set []) = False
+member val (Set (x:xs)) = x == val || member val (Set xs)
 
 -- add a member to a set
-add :: a -> Set a -> Set a
-add = todo
+add :: Ord a => a -> Set a -> Set a
+add val (Set []) = Set [val]
+add val g@(Set b) = if member val g then g else  Set (sort (val:b))
 
 ------------------------------------------------------------------------------
 -- Ex 3: a state machine for baking a cake. The type Event represents
@@ -92,10 +94,28 @@ add = todo
 data Event = AddEggs | AddFlour | AddSugar | Mix | Bake
   deriving (Eq,Show)
 
-data State = Start | Error | Finished
+data State  = Start | Error | Finished | EAddEggs | EAddFlour | EAddSugar | EMix | EBake  | AddedSugarFLour
   deriving (Eq,Show)
 
-step = todo
+
+
+step :: State -> Event-> State
+step EAddEggs AddFlour = EAddFlour
+step EAddEggs AddSugar = EAddSugar
+step EAddEggs _ = Error
+step EAddFlour AddSugar = AddedSugarFLour
+step EAddFlour _ = Error
+step AddedSugarFLour Mix = EMix
+step AddedSugarFLour _ = Error
+step EAddSugar AddFlour = AddedSugarFLour
+step EAddSugar _ = Error
+step EMix Bake = Finished
+step EMix _ = Error
+step Error _ = Error
+step Start AddEggs = EAddEggs
+step Start _ = Error
+step Finished _ = Finished
+step _ _ = Error
 
 -- do not edit this
 bake :: [Event] -> State
@@ -115,7 +135,8 @@ bake events = go Start events
 --   average (1.0 :| [2.0,3.0])  ==>  2.0
 
 average :: Fractional a => NonEmpty a -> a
-average = todo
+average (x :| []) = x
+average (x :| xs)= (x  + sum xs) / fromIntegral (1 + length xs)
 
 ------------------------------------------------------------------------------
 -- Ex 5: reverse a NonEmpty list.
@@ -123,13 +144,22 @@ average = todo
 -- PS. The Data.List.NonEmpty type has been imported for you
 
 reverseNonEmpty :: NonEmpty a -> NonEmpty a
-reverseNonEmpty = todo
+reverseNonEmpty (x :| []) =  x :| []
+reverseNonEmpty g@(x :| xs) = last xs:| drop 1 (reverse (x:xs))
+
 
 ------------------------------------------------------------------------------
 -- Ex 6: implement Semigroup instances for the Distance, Time and
 -- Velocity types from exercise 1. The instances should perform
 -- addition.
 --
+instance Semigroup Distance where
+  Distance a <> Distance b = Distance (a + b)
+instance Semigroup Time where
+  Time a <> Time b = Time (a + b)
+instance Semigroup Velocity where
+  Velocity a <> Velocity b = Velocity (a + b)
+  
 -- When you've defined the instances you can do things like this:
 --
 -- velocity (Distance 50 <> Distance 10) (Time 1 <> Time 2)
@@ -140,6 +170,20 @@ reverseNonEmpty = todo
 -- Ex 7: implement a Monoid instance for the Set type from exercise 2.
 -- The (<>) operation should be the union of sets.
 --
+instance Ord a => Semigroup (Set a) where
+  Set a <> Set b =  appends (extractArrayFromSets (Set b)) (Set a)
+
+appends :: Ord a => [a] -> Set a -> Set a
+appends [] b = b
+appends (x:xs)  b = add x (appends xs b)
+
+extractArrayFromSets :: Set a -> [a]
+extractArrayFromSets (Set []) = []
+extractArrayFromSets (Set (x:xs)) = x:xs 
+
+
+instance Ord a => Monoid (Set a) where
+  mempty  = emptySet
 -- What's the right definition for mempty?
 --
 -- What are the class constraints for the instances?
