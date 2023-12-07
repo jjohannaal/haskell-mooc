@@ -161,12 +161,8 @@ isPrime n
 
 biggestPrimeAtMost :: Integer -> Integer
 biggestPrimeAtMost n
-    | n <= 1 = 0 
-    | otherwise = findLargestPrime (n - 1)  
-
-findLargestPrime :: Integer -> Integer
-findLargestPrime n
-    | n <= 1 = 0  
+    | n <= 2 = n  
     | isPrime n = n  
-    | otherwise = findLargestPrime (n - 1) 
+    | otherwise = biggestPrimeAtMost (n - 1) 
+
 
