@@ -81,9 +81,11 @@ mapMaybe2 f (Just x) (Just y) = Just (f x y)
 palindromeHalfs :: [String] -> [String]
 palindromeHalfs xs = map firstHalf (filter palindrome xs)
 
-firstHalf = todo
+firstHalf :: String -> String
+firstHalf s = take (div (n+1) 2) s where n = length s
 
-palindrome = todo
+palindrome :: String -> Bool
+palindrome s = reverse s == s
 
 ------------------------------------------------------------------------------
 -- Ex 5: Implement a function capitalize that takes in a string and
@@ -167,17 +169,14 @@ while check update value
 -- Hint! Remember the case-of expression from lecture 2.
 
 whileRight :: (a -> Either b a) -> a -> b
-whileRight check x = todo
+whileRight f x = whileRight' f (f x)
 
--- for the whileRight examples:
--- step k x doubles x if it's less than k
+whileRight' :: (a -> Either b a) -> Either b a -> b
+whileRight' _ (Left x)    = x
+whileRight' f (Right x)   = whileRight' f (f x)
+
 step :: Int -> Int -> Either Int Int
 step k x = if x<k then Right (2*x) else Left x
-
--- bomb x implements a countdown: it returns x-1 or "BOOM" if x was 0
-bomb :: Int -> Either String Int
-bomb 0 = Left "BOOM"
-bomb x = Right (x-1)
 
 ------------------------------------------------------------------------------
 -- Ex 9: given a list of strings and a length, return all strings that
@@ -204,6 +203,9 @@ joinToLength len strings = [x ++ y | x <- strings, y <- strings, length (x ++ y)
 --   [1,2,3] +|+ [4,5,6]  ==> [1,4]
 --   [] +|+ [True]        ==> [True]
 --   [] +|+ []            ==> []
+
+(+|+) :: [a] -> [a] -> [a]
+x +|+ y = map head $ filter (not . null) [x,y]
 
 ------------------------------------------------------------------------------
 -- Ex 11: remember the lectureParticipants example from Lecture 2? We
