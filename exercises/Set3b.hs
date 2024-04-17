@@ -49,12 +49,18 @@ buildList start count end = start : buildList start (count - 1) end
 --
 -- Ps. you'll probably need a recursive helper function
 
-sumsHelper :: Int -> Int -> [Int]
-sumsHelper _ 0 = []  
-sumsHelper sumSoFar i = sumSoFar : sumsHelper (sumSoFar + i) (i - 1)  
-
 sums :: Int -> [Int]
-sums i = sumsHelper 1 i  
+sums 0 = []
+sums i = sums' 0 i
+
+sums' :: Int -> Int -> [Int]
+sums' x a
+    | x == a    = []
+    | otherwise = p b : sums' b a where b = x + 1
+
+p :: Int -> Int
+p 1 = 1
+p n = n + p (n - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 3: define a function mylast that returns the last value of the
@@ -126,8 +132,11 @@ sorted (x:y:xs)
 -- Use pattern matching and recursion (and the list constructors : and [])
 
 sumsOf :: [Int] -> [Int]
-sumsOf xs = todo
+sumsOf xs = sumsOf' 0 xs
 
+sumsOf' :: Int -> [Int] -> [Int]
+sumsOf' t []     = []
+sumsOf' t (x:xs) = a : sumsOf' a xs where a = t+x
 
 ------------------------------------------------------------------------------
 -- Ex 7: implement the function merge that merges two sorted lists of
