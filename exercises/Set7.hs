@@ -209,29 +209,42 @@ instance Ord a => Monoid (Set a) where
 --   show2 (Multiply2 4 5) ==> "4*5"
 
 data Operation1 = Add1 Int Int
-                | Subtract1 Int Int
+                | Subtract1 Int Int | Multiply1 Int Int
   deriving Show
 
 compute1 :: Operation1 -> Int
 compute1 (Add1 i j) = i+j
 compute1 (Subtract1 i j) = i-j
+compute1 (Multiply1 i j) = i*j
 
 show1 :: Operation1 -> String
-show1 = todo
+show1 (Add1 i j)      = (show i) ++ "+" ++ (show j)
+show1 (Subtract1 i j) = (show i) ++ "-" ++ (show j)
+show1 (Multiply1 i j) = (show i) ++ "*" ++ (show j)
 
 data Add2 = Add2 Int Int
   deriving Show
 data Subtract2 = Subtract2 Int Int
   deriving Show
+data Multiply2 = Multiply2 Int Int
+  deriving Show
 
 class Operation2 op where
   compute2 :: op -> Int
+  show2 :: op -> String
 
 instance Operation2 Add2 where
   compute2 (Add2 i j) = i+j
+  show2 (Add2 i j)    = (show i) ++ "+" ++ (show j)
 
 instance Operation2 Subtract2 where
   compute2 (Subtract2 i j) = i-j
+  show2 (Subtract2 i j)    = (show i) ++ "-" ++ (show j)
+
+instance Operation2 Multiply2 where
+  compute2 (Multiply2 i j) = i*j
+  show2 (Multiply2 i j)    = (show i) ++ "*" ++ (show j)
+
 
 
 ------------------------------------------------------------------------------
@@ -261,7 +274,18 @@ data PasswordRequirement =
   deriving Show
 
 passwordAllowed :: String -> PasswordRequirement -> Bool
-passwordAllowed = todo
+passwordAllowed "" _                     = False
+passwordAllowed psw (MinimumLength minL) = not $ length psw < minL
+passwordAllowed psw (ContainsSome chk)   = not $ dropNot chk psw
+passwordAllowed psw (DoesNotContain chk) = dropNot chk psw
+passwordAllowed psw (And req1 req2)      = (check psw req1) && (check psw req2)
+passwordAllowed psw (Or req1 req2)       = (check psw req1) || (check psw req2)
+
+dropNot :: String -> String -> Bool
+dropNot chk psw = null $ dropWhile (\x -> notElem x chk) psw
+
+check :: String -> PasswordRequirement -> Bool
+check psw r = passwordAllowed psw r
 
 ------------------------------------------------------------------------------
 -- Ex 10: a DSL for simple arithmetic expressions with addition and
@@ -283,17 +307,21 @@ passwordAllowed = todo
 --     ==> "(3*(1+1))"
 --
 
-data Arithmetic = Todo
+data Arithmetic = Literal Integer | Operation String Arithmetic Arithmetic
   deriving Show
 
 literal :: Integer -> Arithmetic
-literal = todo
+literal x = Literal x
 
 operation :: String -> Arithmetic -> Arithmetic -> Arithmetic
-operation = todo
+operation sym x y = Operation sym x y
 
 evaluate :: Arithmetic -> Integer
-evaluate = todo
+evaluate (Literal x) = x
+evaluate (Operation sym x y)
+  | sym == "+"  = (+) (evaluate x) (evaluate y)
+  | sym == "*"  = (*) (evaluate x) (evaluate y)
 
 render :: Arithmetic -> String
-render = todo
+render (Literal x)         = show x
+render (Operation sym x y) = "(" ++ (render x) ++ (sym) ++ (render y) ++ ")"
