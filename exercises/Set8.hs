@@ -402,19 +402,21 @@ xy = Picture f
 data Fill = Fill Color
 
 instance Transform Fill where
-  apply = todo
+  apply (Fill color) _ = Picture (\c -> color)
 
 data Zoom = Zoom Int
   deriving Show
 
 instance Transform Zoom where
-  apply = todo
+  apply (Zoom m) p = zoom m p
 
 data Flip = FlipX | FlipY | FlipXY
   deriving Show
 
 instance Transform Flip where
-  apply = todo
+  apply (FlipX) (Picture f) = Picture (\(Coord x y) -> f (Coord (-x) y))
+  apply (FlipY) (Picture f) = Picture (\(Coord x y) -> f (Coord x (-y)))
+  apply (FlipXY) p          = flipXY p
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
@@ -429,8 +431,8 @@ instance Transform Flip where
 data Chain a b = Chain a b
   deriving Show
 
-instance Transform (Chain a b) where
-  apply = todo
+instance (Transform a, Transform b) => Transform (Chain a b) where
+  apply (Chain a b) p = (apply a . apply b) p
 ------------------------------------------------------------------------------
 
 -- Now we can redefine largeVerticalStripes using the above Transforms.
@@ -468,7 +470,17 @@ data Blur = Blur
   deriving Show
 
 instance Transform Blur where
-  apply = todo
+  apply _ (Picture f) = Picture (\(Coord x y) ->  avg (map (f . co) $ neighbours x y))
+    where co t = Coord (fst t) (snd t)
+          neighbours x y = [(x,y),(x-1,y),(x+1,y),(x,y-1),(x,y+1)]
+          avg xs = divColor (foldr (sumColor) (Color 0 0 0) xs) (length xs)
+
+sumColor :: Color -> Color -> Color
+sumColor (Color r1 g1 b1) (Color r2 g2 b2) = Color (r1+r2) (g1+g2) (b1+b2)
+
+divColor :: Color -> Int -> Color
+divColor (Color x y z) i = Color (d x) (d y) (d z)
+  where d c = (div) c i
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
@@ -486,7 +498,8 @@ data BlurMany = BlurMany Int
   deriving Show
 
 instance Transform BlurMany where
-  apply = todo
+  apply (BlurMany 0) p = p
+  apply (BlurMany n) p = apply (BlurMany (n-1)) (apply Blur p)
 ------------------------------------------------------------------------------
 
 -- Here's a blurred version of our original snowman. See it by running
