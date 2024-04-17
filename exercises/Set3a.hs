@@ -297,16 +297,30 @@ multiApp f gs x = f (map ($ x) gs)
 -- function, the surprise won't work. See section 3.8 in the material.
 
 interpreter :: [String] -> [String]
-interpreter commands = interpret commands 0 0 []
+interpreter commands = interpret 0 0 commands
 
-interpret :: [String] -> Int -> Int -> [String] -> [String]
-interpret [] _ _ output = output
-interpret (cmd:cmds) x y output
-  | cmd == "up" = interpret cmds x (y + 1) output
-  | cmd == "down" = interpret cmds x (y - 1) output
-  | cmd == "left" = interpret cmds (x - 1) y output
-  | cmd == "right" = interpret cmds (x + 1) y output
-  | cmd == "printX" = interpret cmds x y (show x : output)
-  | cmd == "printY" = interpret cmds x y (show y : output)
-  | otherwise = interpret cmds x y output
+interpret :: Int -> Int -> [String] -> [String]
+interpret _ _ [] = []
+interpret x y commands = evalPrint sX sY (head dW) : interpret sX sY (drop 1 dW)
+                            where l = takeWhile direction commands
+                                  dW = dropWhile direction commands
+                                  sX = sum (map conX l) + x
+                                  sY = sum (map conY l) + y
+
+conX :: String -> Int
+conX dir = case dir of "left" -> -1
+                       "right" -> 1
+                       dir -> 0
+
+conY :: String -> Int
+conY dir = case dir of "up" -> 1
+                       "down" -> -1
+                       dir -> 0
+
+direction :: String -> Bool
+direction s = elem s ["up", "down", "left", "right"]
+
+evalPrint :: Int -> Int -> String -> String
+evalPrint x _ "printX" = show x
+evalPrint _ y "printY" = show y
 
